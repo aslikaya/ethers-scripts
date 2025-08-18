@@ -16,6 +16,8 @@ const provider = new ethers.JsonRpcProvider(infuraUrl);
 //     process.env.INFURA_KEY
 // );
  
+//await is needed to get the block number, it is a promise, 
+// so we need to wait for it to resolve
 console.log("Current block number", await provider.getBlockNumber());
 
 console.log("atg.eth is", await provider.resolveName("atg.eth"));
