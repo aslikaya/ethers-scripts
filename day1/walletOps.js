@@ -39,7 +39,7 @@ const tx = await wallet.sendTransaction({
 
 console.log("TX SENT, IT IS IN THE MEMPOOL", tx);
 
-// This awaits the transaction is mined into the block
+// This awaits the transaction is included into the block
 await tx.wait();
 
 console.log("TX CONFIRMED!");

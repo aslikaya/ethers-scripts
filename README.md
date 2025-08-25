@@ -1,27 +1,46 @@
 # Ethers Scripts
 
-A collection of Ethereum development scripts using ethers.js v6 for interacting with the Ethereum blockchain. This project follows the Buidl Guidl's Web2 to Web3 Curriculum [Week 2, Day 1: Scripting and Smart Contracts! Providers, Signers, and Wallets](https://www.youtube.com/watch?v=m2AJAcWk394&list=PLJz1HruEnenAf80uOfDwBPqaliJkjKg69&index=7). Since the original video is from 2022, this repository contains updated code examples compatible with ethers.js v6.
+A collection of Ethereum development scripts using ethers.js v6 for interacting with the Ethereum blockchain. This project follows the Buidl Guidl's [Web2 to Web3 Curriculum Week#2](https://www.youtube.com/watch?v=zuJ-elbo88E&list=PLJz1HruEnenAf80uOfDwBPqaliJkjKg69), progressing from basic blockchain interactions to smart contract development.
 
 ## Overview
 
-This repository contains practical examples of Ethereum blockchain interactions using ethers.js v6, including:
+This repository contains practical examples of Ethereum blockchain interactions using ethers.js v6, organized by learning progression:
 
+**Day 1 - Blockchain Basics:**
 - **Provider Setup**: Connecting to Ethereum networks via Infura
 - **Wallet Management**: Creating and managing wallets
 - **Balance Queries**: Checking ETH balances
 - **Transaction Sending**: Sending ETH transactions
 - **Message Signing**: Signing and verifying messages
 
+**Day 2 - Smart Contract Interactions:**
+- **Contract Reading**: Reading data from smart contracts
+- **Contract Writing**: Writing transactions to smart contracts
+- **ERC-20 Token Operations**: Interacting with DAI token contract
+- **NFT Operations**: Reading and minting NFTs
+- **Utility Functions**: Reusable provider and signer utilities
+
 ## Project Structure
 
 ```
 ethers-scripts/
 ├── package.json          # Dependencies and scripts
-├── providers.js          # Provider setup and balance queries
-├── wallets.js           # Wallet creation and HD wallet generation
-├── walletOps.js         # Wallet operations (signing, transactions)
-├── .env                 # Environment variables (create this)
-└── README.md           # This file
+├── day1/                 # Day 1: Blockchain Basics
+│   ├── providers.js      # Provider setup and balance queries
+│   ├── wallets.js        # Wallet creation and HD wallet generation
+│   └── walletOps.js      # Wallet operations (signing, transactions)
+├── day2/                 # Day 2: Smart Contract Interactions
+│   ├── abi/              # Smart contract ABIs
+│   │   ├── daiAbi.js     # DAI token contract ABI
+│   │   └── yourCollectibleAbi.js # NFT contract ABI
+│   ├── contract_dai_ops.js    # DAI token contract interactions
+│   ├── contract_read.js        # Reading NFT contract data
+│   ├── contract_write.js       # Writing to NFT contract (minting)
+│   ├── get_address.js          # Get wallet address and balance
+│   ├── sendETH.js              # Send ETH transactions
+│   └── utils.js                # Utility functions (providers, signers)
+├── .env                  # Environment variables (create this)
+└── README.md            # This file
 ```
 
 ## Setup
@@ -62,7 +81,9 @@ TO_ADDRESS=
 
 ## Scripts
 
-### providers.js
+### Day 1 Scripts (Blockchain Basics)
+
+#### day1/providers.js
 
 Demonstrates provider setup and basic blockchain queries:
 
@@ -74,7 +95,7 @@ Demonstrates provider setup and basic blockchain queries:
 
 **Run with:**
 ```bash
-node providers.js
+node day1/providers.js
 ```
 
 **Features:**
@@ -84,7 +105,7 @@ node providers.js
 - Balance comparison between two addresses
 - BigInt arithmetic for balance calculations
 
-### wallets.js
+#### day1/wallets.js
 
 Demonstrates wallet creation and HD wallet generation:
 
@@ -94,7 +115,7 @@ Demonstrates wallet creation and HD wallet generation:
 
 **Run with:**
 ```bash
-node wallets.js
+node day1/wallets.js
 ```
 
 **Features:**
@@ -103,7 +124,7 @@ node wallets.js
 - BIP-44 path generation for different account indices
 - Private key and address generation for each account
 
-### walletOps.js
+#### day1/walletOps.js
 
 Demonstrates wallet operations and transaction functionality:
 
@@ -114,7 +135,7 @@ Demonstrates wallet operations and transaction functionality:
 
 **Run with:**
 ```bash
-node walletOps.js
+node day1/walletOps.js
 ```
 
 **Features:**
@@ -123,6 +144,93 @@ node walletOps.js
 - Balance checking before transactions
 - Transaction confirmation waiting
 - Provider-connected wallet operations
+
+### Day 2 Scripts (Smart Contract Interactions)
+
+#### day2/utils.js
+
+Provides reusable utility functions for provider and signer management:
+
+- `getProvider(mainnet)`: Creates JsonRpcProvider for mainnet or Sepolia
+- `getSigner(mainnet)`: Creates wallet signer connected to provider
+- `generateNewWallet()`: Generates new random wallet with mnemonic
+
+**Features:**
+- Network switching (mainnet/Sepolia) via boolean parameter
+- Environment-based private key wallet creation
+- Reusable across all day2 scripts
+
+#### day2/get_address.js
+
+Simple script to display wallet address and balance:
+
+**Run with:**
+```bash
+node day2/get_address.js
+```
+
+**Features:**
+- Displays wallet address from environment
+- Shows current ETH balance on mainnet
+
+#### day2/sendETH.js
+
+Demonstrates ETH transfer functionality:
+
+**Run with:**
+```bash
+node day2/sendETH.js
+```
+
+**Features:**
+- Sends 10% of wallet balance to specified address
+- Balance validation before sending
+- Transaction confirmation waiting
+- Uses Sepolia testnet
+
+#### day2/contract_read.js
+
+Demonstrates reading data from smart contracts:
+
+**Run with:**
+```bash
+node day2/contract_read.js
+```
+
+**Features:**
+- Reads totalSupply from YourCollectible NFT contract
+- Uses contract ABI for function calls
+- Read-only operations (no gas required)
+
+#### day2/contract_write.js
+
+Demonstrates writing to smart contracts (minting NFTs):
+
+**Run with:**
+```bash
+node day2/contract_write.js
+```
+
+**Features:**
+- Mints NFT using YourCollectible contract
+- Shows two methods: raw transaction and contract method
+- Uses function selector and calldata encoding
+- Transaction confirmation and gas usage
+
+#### day2/contract_dai_ops.js
+
+Demonstrates ERC-20 token contract interactions:
+
+**Run with:**
+```bash
+node day2/contract_dai_ops.js
+```
+
+**Features:**
+- Reads DAI token balance
+- Transfers DAI tokens to another address
+- Balance checking before and after transfer
+- Mainnet DAI contract interaction
 
 ## Key Concepts
 
@@ -159,6 +267,55 @@ const randomWallet = ethers.Wallet.createRandom();
 
 // HD wallet from mnemonic
 const hdWallet = ethers.HDNodeWallet.fromPhrase(mnemonic, undefined, path);
+```
+
+### Smart Contract Interactions
+
+#### Contract Instances
+
+```javascript
+// Read-only contract (connected to provider)
+const contract = new ethers.Contract(contractAddress, abi, provider);
+
+// Write-capable contract (connected to signer)
+const contractWithSigner = new ethers.Contract(contractAddress, abi, signer);
+```
+
+#### Reading Contract Data
+
+```javascript
+// No gas required for read operations
+const totalSupply = await contract.totalSupply();
+const balance = await tokenContract.balanceOf(address);
+```
+
+#### Writing to Contracts
+
+```javascript
+// Method 1: Using contract methods
+const tx = await contractWithSigner.transfer(toAddress, amount);
+await tx.wait(); // Wait for confirmation
+
+// Method 2: Raw transaction with calldata
+const calldata = contract.interface.encodeFunctionData("transfer", [toAddress, amount]);
+const tx = await signer.sendTransaction({
+    to: contractAddress,
+    data: calldata,
+    value: 0
+});
+```
+
+### Contract ABIs
+
+Contract ABIs (Application Binary Interface) define how to interact with smart contracts:
+
+```javascript
+// ABI defines the contract's functions and events
+const abi = [
+    "function totalSupply() view returns (uint256)",
+    "function balanceOf(address owner) view returns (uint256)",
+    "function transfer(address to, uint256 amount) returns (bool)"
+];
 ```
 
 ## Environment Variables
