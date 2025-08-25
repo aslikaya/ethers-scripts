@@ -307,23 +307,47 @@ const tx = await signer.sendTransaction({
 
 ### Contract ABIs
 
-Contract ABIs (Application Binary Interface) define how to interact with smart contracts:
+Contract ABIs (Application Binary Interface) define how to interact with smart contracts. An ABI is an array of JSON objects where each object represents either a function, event, constructor, fallback, receive or error. In ABIs in this project function, event and constructor elements are used in the interface:
 
 ```javascript
-// ABI defines the contract's functions and events
-const abi = [
+// Full ABI format (as used in this project)
+const abi = [{
+    "constant": true,
+    "inputs": [],
+    "name": "totalSupply",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+}, {
+    "constant": true,
+    "inputs": [{
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+    }],
+    "name": "balanceOf",
+    "outputs": [{
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+    }],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+}];
+
+// Alternative: Human-readable ABI format (ethers.js also supports this)
+const humanReadableAbi = [
     "function totalSupply() view returns (uint256)",
     "function balanceOf(address owner) view returns (uint256)",
     "function transfer(address to, uint256 amount) returns (bool)"
 ];
 ```
-
-## Environment Variables
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `INFURA_KEY` | Your Infura API key | `abc123def456...` |
-| `WALLET_PRIVATE_KEY` | Private key for transactions | `0x0000000000000000000000000000000000000000000000000000000000000000` |
 
 ## Dependencies
 
