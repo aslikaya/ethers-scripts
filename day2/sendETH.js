@@ -14,6 +14,7 @@ if (!toAddress) {
 }
 console.log("Sending Sepolia ETH to", toAddress);
 
+// Sending %10 of the balance
 const valueToSend = myBalance / 10n;
 if (valueToSend === 0n) {
     console.error("Balance too low to send.");
@@ -30,4 +31,4 @@ console.log("TX SENT, IT IS IN THE MEMPOOL", tx.hash);
 // This awaits the transaction is included into the block
 await tx.wait();
 
-console.log("TX CONFIRMED!");
+console.log("TX CONFIRMED!"); // It is on the blockchain!

@@ -9,7 +9,8 @@ const provider = new ethers.JsonRpcProvider(infuraUrl);
 //Picked one of the account created by the mnemonic in wallets.js 
 // and put its private key in the .env file
 console.log("private key: ", process.env.WALLET_PRIVATE_KEY);
-// creates the wallet, also connects the wallet to a provider
+// creates the wallet with specified private key, 
+// also connects the wallet to a provider so it can sign transactions
 const wallet = new ethers.Wallet(process.env.WALLET_PRIVATE_KEY, provider);
 // what I expect to see in logs: process.env.WALLET_PUBLIC_ADDRESS
 console.log("My wallet address derived from private key is:", wallet.address);

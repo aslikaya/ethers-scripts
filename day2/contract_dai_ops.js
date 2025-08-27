@@ -33,4 +33,4 @@ await daiTransfer.wait();
 console.log("TX in the blockchain!");
 
 const daiBalanceAfterTx = await daiContract.balanceOf(myAddress);
-console.log("My balance after transfer:", ethers.formatEther(daiBalanceAfterTx));
+console.log("Dai balance after transfer:", ethers.formatEther(daiBalanceAfterTx));
