@@ -19,6 +19,7 @@ contract CounterTest is Test {
   }
 
   function testFuzz_Inc(uint8 x) public {
+    counter.toggleUnlocked();
     for (uint8 i = 0; i < x; i++) {
       counter.inc();
     }
