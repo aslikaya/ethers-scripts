@@ -20,6 +20,14 @@ This repository contains practical examples of Ethereum blockchain interactions 
 - **NFT Operations**: Reading and minting NFTs
 - **Utility Functions**: Reusable provider and signer utilities
 
+**Day 3 - Smart Contract Development:**
+- **Hardhat Framework**: Full development environment with compilation, testing, and deployment
+- **Solidity Development**: Writing and testing smart contracts with lock/unlock mechanisms
+- **Test-Driven Development**: Comprehensive testing with Mocha and Foundry-style tests
+- **Multi-Network Deployment**: Local, Sepolia, and simulated network configurations
+- **Contract Verification**: Etherscan integration for contract verification
+- **Utility Scripts**: Blockchain interaction scripts for different networks
+
 ## Project Structure
 
 ```
@@ -39,6 +47,22 @@ ethers-scripts/
 │   ├── get_address.js          # Get wallet address and balance
 │   ├── sendETH.js              # Send ETH transactions
 │   └── utils.js                # Utility functions (providers, signers)
+├── day3/                 # Day 3: Smart Contract Development (Hardhat)
+│   ├── contracts/        # Solidity smart contracts
+│   │   ├── Counter.sol   # Counter contract with lock/unlock mechanism
+│   │   └── Counter.t.sol # Foundry-style Solidity tests
+│   ├── test/             # TypeScript tests
+│   │   └── Counter.ts    # Mocha tests for Counter contract
+│   ├── ignition/         # Hardhat Ignition deployment modules
+│   │   └── modules/Counter.ts # Counter deployment configuration
+│   ├── scripts/          # Utility scripts for blockchain interaction
+│   │   ├── contracts.js  # Interact with deployed Counter on localhost
+│   │   ├── getBalance.js # Check balance on simulated Optimism network
+│   │   ├── getSepoliaSigner.js # Connect to Sepolia and get signer info
+│   │   └── sendETH.js    # Send ETH transactions with safety checks
+│   ├── hardhat.config.ts # Hardhat configuration with multi-network support
+│   ├── package.json      # Day 3 specific dependencies
+│   └── README.md         # Hardhat project documentation
 ├── .env                  # Environment variables (create this)
 └── README.md            # This file
 ```
@@ -77,6 +101,15 @@ WALLET_PUBLIC_ADDRESS=
 
 # Destination address for sending ETH transactions
 TO_ADDRESS=
+
+# Etherscan API key for contract verification (Day 3)
+ETHERSCAN_API_KEY=
+```
+
+4. For Day 3 Hardhat development, install additional dependencies:
+```bash
+cd day3
+npm install
 ```
 
 ## Scripts
@@ -232,6 +265,134 @@ node day2/contract_dai_ops.js
 - Balance checking before and after transfer
 - Mainnet DAI contract interaction
 
+### Day 3 Scripts (Smart Contract Development)
+
+Day 3 introduces Hardhat, a comprehensive Ethereum development environment that provides compilation, testing, and deployment tools.
+
+#### Setup and Testing
+
+**Navigate to day3 directory:**
+```bash
+cd day3
+```
+
+**Run all tests:**
+```bash
+npx hardhat test
+```
+
+**Run specific test types:**
+```bash
+npx hardhat test solidity  # Run Foundry-style Solidity tests
+npx hardhat test mocha     # Run TypeScript/Mocha tests
+```
+
+#### Smart Contract: Counter.sol
+
+The Counter contract demonstrates:
+- Basic state management with increment functionality
+- Access control using a lock/unlock mechanism
+- Event emission for blockchain activity tracking
+- Comprehensive testing patterns
+
+**Key features:**
+- `inc()`: Increment counter by 1 (requires unlock)
+- `incBy(uint by)`: Increment counter by specified amount (requires unlock)
+- `toggleUnlocked()`: Toggle the lock state
+- `Increment` event emission for all increments
+
+#### Deployment
+
+**Deploy to local Hardhat network:**
+```bash
+npx hardhat ignition deploy ignition/modules/Counter.ts
+```
+
+**Deploy to Sepolia testnet:**
+```bash
+npx hardhat ignition deploy --network sepolia ignition/modules/Counter.ts
+```
+
+**Verify contract on Etherscan:**
+```bash
+npx hardhat verify --network sepolia <CONTRACT_ADDRESS>
+```
+
+#### Utility Scripts
+
+**day3/scripts/contracts.js**
+Demonstrates contract interaction on localhost:
+- Connects to locally deployed Counter contract
+- Shows reading contract state (`x` value)
+- Demonstrates contract method calls (`incBy`)
+- Transaction confirmation handling
+
+**Run with:**
+```bash
+# First start local Hardhat node in another terminal
+npx hardhat node
+# Then run the script
+npx hardhat run scripts/contracts.js
+```
+
+**day3/scripts/getBalance.js**
+Shows balance checking on simulated Optimism network:
+- Connects to Hardhat's ephemeral simulated OP network
+- Demonstrates cross-chain network configuration
+- Balance queries using different network types
+- Network spins up temporarily just for this script execution
+
+**Run with:**
+```bash
+npx hardhat run scripts/getBalance.js
+```
+
+**day3/scripts/getSepoliaSigner.js**
+Connects to Sepolia testnet:
+- Environment-based wallet configuration
+- Real testnet connection via Infura
+- Signer address and balance display
+
+**Run with:**
+```bash
+npx hardhat run scripts/getSepoliaSigner.js
+```
+
+**day3/scripts/sendETH.js**
+ETH transfer with safety features:
+- Balance validation before sending
+- Sends 10% of available balance
+- Transaction confirmation waiting
+- Error handling for insufficient funds
+
+**Run with:**
+```bash
+npx hardhat run scripts/sendETH.js
+```
+
+#### Hardhat Configuration Features
+
+The `hardhat.config.ts` includes:
+- **Multi-network support**: localhost, Sepolia, simulated networks
+- **Solidity optimization**: Enabled for contract verification
+- **Environment integration**: dotenv configuration for sensitive data
+- **Etherscan verification**: API key configuration for contract verification
+- **TypeScript support**: Full type safety for development
+
+#### Testing Strategy
+
+**Solidity Tests (Counter.t.sol):**
+- Foundry-style testing directly in Solidity
+- Fuzz testing with random inputs
+- Gas-efficient testing patterns
+
+**TypeScript Tests (Counter.ts):**
+- Mocha framework with Chai assertions
+- Comprehensive edge case testing
+- Event emission verification
+- Lock/unlock state testing
+- Transaction revert testing
+
 ## Key Concepts
 
 ### BigInt vs BigNumber
@@ -351,15 +512,31 @@ const humanReadableAbi = [
 
 ## Dependencies
 
+**Root project:**
 - **ethers**: ^6.14.1 - Ethereum library for JavaScript
 - **dotenv**: ^16.5.0 - Environment variable management
+
+**Day 3 (Hardhat project):**
+- **hardhat**: ^3.0.3 - Ethereum development environment
+- **@nomicfoundation/hardhat-toolbox-mocha-ethers**: ^3.0.0 - Hardhat toolbox with Mocha and ethers
+- **@nomicfoundation/hardhat-ignition**: ^3.0.1 - Contract deployment system
+- **mocha**: ^11.7.1 - JavaScript test framework
+- **typescript**: ~5.8.0 - TypeScript compiler
+- **dotenv**: ^17.2.2 - Environment variable management for Hardhat
 
 ## Networks
 
 The scripts are configured to work with:
 
+**Days 1-2:**
 - **Mainnet**: For balance queries and ENS resolution
 - **Sepolia**: For transaction testing (testnet)
+
+**Day 3 (Hardhat):**
+- **localhost**: Local Hardhat node (http://127.0.0.1:8545) - persistent while running
+- **Sepolia**: Ethereum testnet via Infura - real network
+- **hardhatMainnet**: Simulated Ethereum mainnet (ephemeral) - exists only during script execution
+- **hardhatOp**: Simulated Optimism network (ephemeral) - exists only during script execution
 
 ## Common Issues
 
