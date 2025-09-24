@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
 import {Counter} from "./Counter.sol";
@@ -9,24 +9,33 @@ import {Test} from "forge-std/Test.sol";
 
 contract CounterTest is Test {
   Counter counter;
+  uint256 initialValue = 10;
 
   function setUp() public {
-    counter = new Counter();
+    counter = new Counter(initialValue);
   }
 
   function test_InitialValue() public view {
-    require(counter.x() == 0, "Initial value should be 0");
+    assertEq(counter.count(), initialValue);
   }
 
-  function testFuzz_Inc(uint8 x) public {
-    for (uint8 i = 0; i < x; i++) {
+  function testFuzz_Inc(uint8 count) public {
+    for (uint8 i = 0; i < count; i++) {
       counter.inc();
     }
-    require(counter.x() == x, "Value after calling inc x times should be x");
+    assertEq(counter.count(), count + initialValue);
   }
 
-  function test_IncByZero() public {
+  function test_Dec() public {
+    for (uint256 i = counter.count(); i > 0; i--) {
+      counter.dec();
+    }
+    assertEq(counter.count(), 0);
+  }
+
+  function test_DecBelowZero() public {
+    test_Dec();
     vm.expectRevert();
-    counter.incBy(0);
+    counter.dec();
   }
 }
