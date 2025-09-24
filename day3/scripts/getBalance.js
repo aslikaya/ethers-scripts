@@ -1,5 +1,7 @@
 import { network } from "hardhat";
 
+// Another implementation of ethers, the same functionality 
+// but configured for the specified network and chainType
 const { ethers } = await network.connect({
   network: "hardhatOp",
   chainType: "op",
