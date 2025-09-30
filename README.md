@@ -28,6 +28,12 @@ This repository contains practical examples of Ethereum blockchain interactions 
 - **Contract Verification**: Etherscan integration for contract verification
 - **Utility Scripts**: Blockchain interaction scripts for different networks
 
+**Day 4 - Testing Patterns:**
+- **Dual Testing Frameworks**: Foundry (Solidity) and Hardhat (TypeScript) testing approaches
+- **Foundry Integration**: Native Solidity tests with fuzz testing capabilities
+- **Test Coverage**: Comprehensive testing of contract state, increments, decrements, and error cases
+- **Clean Contract Design**: Simple Counter contract demonstrating fundamental Solidity patterns
+
 ## Project Structure
 
 ```
@@ -63,6 +69,12 @@ ethers-scripts/
 │   ├── hardhat.config.ts # Hardhat configuration with multi-network support
 │   ├── package.json      # Day 3 specific dependencies
 │   └── README.md         # Hardhat project documentation
+├── day4/                 # Day 4: Testing Patterns
+│   ├── contracts/        # Clean contract implementations
+│   │   ├── Counter.sol   # Simple counter with increment/decrement operations
+│   │   └── Counter.t.sol # Foundry tests with fuzz testing and assertions
+│   └── test/             # Hardhat TypeScript tests
+│       └── Counter.ts    # Integration tests using ethers deployment patterns
 ├── .env                  # Environment variables (create this)
 └── README.md            # This file
 ```
@@ -369,6 +381,67 @@ ETH transfer with safety features:
 ```bash
 npx hardhat run scripts/sendETH.js
 ```
+
+### Day 4 Scripts (Testing Patterns)
+
+Day 4 focuses on comprehensive testing strategies, showcasing how to effectively test smart contracts using both Foundry (Solidity) and Hardhat (TypeScript) frameworks.
+
+#### Smart Contract: Counter.sol (day4/contracts/Counter.sol)
+
+A clean, simple counter implementation demonstrating fundamental Solidity patterns:
+
+**Key features:**
+- `get()`: View current counter value
+- `inc()`: Increment counter by 1
+- `dec()`: Decrement counter by 1 with underflow protection
+- Constructor initialization with custom starting value
+- Error handling with descriptive revert messages
+
+#### Testing Strategy: Dual Framework Approach
+
+**Foundry Tests (Counter.t.sol):**
+- Native Solidity testing with `forge-std/Test.sol`
+- Fuzz testing with `testFuzz_Inc(uint8 count)` for randomized input validation
+- Proper assertion usage with `assertEq()` for precise comparisons
+- Edge case testing including underflow protection with `vm.expectRevert()`
+- Gas-efficient testing patterns running directly on the EVM
+
+**Run Foundry (Solidity) tests:**
+```bash
+cd day4
+forge test  # If forge is installed
+# OR via Hardhat
+npx hardhat test solidity
+```
+
+**Hardhat Tests (Counter.ts):**
+- TypeScript integration tests using Mocha and Chai
+- Real contract deployment simulation with `ethers.deployContract()`
+- Transaction confirmation patterns with `.wait()`
+- Integration with Hardhat's testing environment
+
+**Run Hardhat tests:**
+```bash
+cd day4
+npx hardhat test test/Counter.ts
+# OR
+npx hardhat test mocha
+```
+
+**Run all tests:**
+```bash
+npx hardhat test
+```
+
+#### Key Testing Concepts Demonstrated
+
+**Fuzz Testing:** The Foundry test includes `testFuzz_Inc(uint8 count)` which automatically generates random values for `count` and tests the increment function with various inputs, ensuring robustness across different scenarios.
+
+**State Verification:** Both test suites verify contract state changes by checking the counter value before and after operations.
+
+**Error Testing:** Proper testing of error conditions, specifically testing that decrementing below zero properly reverts with the expected error message.
+
+**Setup Patterns:** Clean test organization with `setUp()` function in Foundry and proper async/await patterns in Hardhat tests.
 
 #### Hardhat Configuration Features
 
