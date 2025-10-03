@@ -9,9 +9,9 @@ import type { AslikoToken } from "../types/ethers-contracts/index.js";
 const { ethers } = await network.connect();
 
 describe("Token", function () {
-  let token : AslikoToken;
+  let token: AslikoToken;
 
-  this.beforeEach(async () => {
+  beforeEach(async () => {
     token = await ethers.deployContract("AslikoToken");
     await token.waitForDeployment();
   });
@@ -25,10 +25,21 @@ describe("Token", function () {
 
   });
 
+  it("Should revert if a non-owner tries to create tokens", async function () {
+    const [signer0, signer1] = await ethers.getSigners();
+
+    // When testing reverts, don't await the transaction, 
+    // pass the promise directly to expect()
+    // otherwise it waits for execution and reverts, 
+    // you never reach the assertion test to catch it
+    const createTx = token.connect(signer1).create(1);
+    await expect(createTx).to.be.revertedWith("Sorry, not the owner");
+  });
+
   it("Should revert if creating more than total supply", async function () {
     const totalSupply = await token.totalSupply();
     const createTx = token.create(totalSupply + 100n);
-    expect(createTx).to.be.revertedWith("totalSupply reached!");
+    await expect(createTx).to.be.revertedWith("totalSupply reached!");
   });
 
   it("Should be able to send tokens", async function () {
@@ -44,4 +55,14 @@ describe("Token", function () {
     expect(await token.balances(signer1.address)).to.equal(25);
   });
 
+  it("Should allow a rando to buy some tokens", async function () {
+    const [signer0, signer1] = await ethers.getSigners();
+
+    const buyTx = await token.connect(signer1).buy({
+      value: await token.CREATION_PRICE(),
+    });
+    await buyTx.wait();
+
+    expect(await token.balances(signer1.address)).to.equal(1);
+  });
 });
