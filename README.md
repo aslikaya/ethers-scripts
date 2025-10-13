@@ -28,10 +28,11 @@ This repository contains practical examples of Ethereum blockchain interactions 
 - **Contract Verification**: Etherscan integration for contract verification
 - **Utility Scripts**: Blockchain interaction scripts for different networks
 
-**Day 4 - Testing Patterns:**
+**Day 4 - Testing Patterns & Token Development:**
 - **Dual Testing Frameworks**: Foundry (Solidity) and Hardhat (TypeScript) approaches
 - **Fuzz Testing**: Automated randomized input testing with Foundry
 - **Simple Counter Contract**: Clean implementation for learning testing fundamentals
+- **AslikoToken Contract**: Custom token with minting, buying (ETH→tokens), and voting system
 
 ## Project Structure
 
@@ -68,12 +69,14 @@ ethers-scripts/
 │   ├── hardhat.config.ts # Hardhat configuration with multi-network support
 │   ├── package.json      # Day 3 specific dependencies
 │   └── README.md         # Hardhat project documentation
-├── day4/                 # Day 4: Testing Patterns
+├── day4/                 # Day 4: Testing Patterns & Token Development
 │   ├── contracts/        # Clean contract implementations
 │   │   ├── Counter.sol   # Simple counter with increment/decrement operations
-│   │   └── Counter.t.sol # Foundry tests with fuzz testing and assertions
+│   │   ├── Counter.t.sol # Foundry tests with fuzz testing and assertions
+│   │   └── AslikoToken.sol # Custom token with minting, buy function, and voting
 │   └── test/             # Hardhat TypeScript tests
-│       └── Counter.ts    # Integration tests using ethers deployment patterns
+│       ├── Counter.ts    # Integration tests using ethers deployment patterns
+│       └── AslikoToken.ts # AslikoToken contract tests
 ├── .env                  # Environment variables (create this)
 └── README.md            # This file
 ```
@@ -381,13 +384,20 @@ ETH transfer with safety features:
 npx hardhat run scripts/sendETH.js
 ```
 
-### Day 4 Scripts (Testing Patterns)
+### Day 4 Scripts (Testing Patterns & Token Development)
 
-Demonstrates dual testing frameworks for comprehensive smart contract testing.
+Demonstrates dual testing frameworks for comprehensive smart contract testing, plus custom token development.
 
 #### Smart Contract: Counter.sol (day4/contracts/Counter.sol)
 
 Simple counter with `get()`, `inc()`, `dec()` functions, constructor initialization, and underflow protection.
+
+#### Smart Contract: AslikoToken.sol (day4/contracts/AslikoToken.sol)
+
+Custom token contract demonstrating:
+- **Owner-based minting**: `mint(address to)` creates new tokens (owner only)
+- **ETH-to-token buying**: `buy()` allows users to purchase tokens with ETH (1 ETH = 1 token)
+- **Voting system**: `vote(bool selection)` and `checkVotes()` for on-chain governance (one vote per address, majority wins)
 
 #### Testing Strategy
 

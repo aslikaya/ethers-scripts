@@ -11,6 +11,14 @@ contract AslikoToken {
 
     mapping(address => uint) public balances;
 
+    struct Vote {
+        address voter;
+        bool selection;
+    }
+
+    Vote[] public votes;
+    mapping(address => bool) public hasVoted;
+
     constructor() {
         owner = msg.sender;
     }
@@ -45,5 +53,22 @@ contract AslikoToken {
 
         balances[msg.sender]++;
         totalCreated++;
+    }
+
+    function vote(bool selection) public {
+        require(!hasVoted[msg.sender], "You already voted");
+        hasVoted[msg.sender] = true;
+        votes.push(Vote(msg.sender, selection));
+    }
+
+    function checkVotes() public view returns(bool resultYes) {
+        uint256 count;
+        for(uint256 i = 0; i < votes.length; i++) { 
+            if(votes[i].selection) {
+                count++;
+            }
+        }
+
+        return count >= votes.length/2 + 1;
     }
 }
