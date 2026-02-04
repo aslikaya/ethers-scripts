@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { ethers } from "ethers";
 import { getProvider, getSigner } from "./utils.js";
 import daiAbi from "./abi/daiAbi.js";
@@ -18,7 +19,7 @@ const daiContractWrite = new ethers.Contract(
     signer
 );
 
-const myAddress = "0x9Ea409585e445F3613DAA27D9FFF7Ead226e20b2";
+const myAddress = process.env.WALLET_PUBLIC_ADDRESS;
 const daiBalance = await daiContract.balanceOf(myAddress);
 
 console.log("Dai balance:", ethers.formatEther(daiBalance));
