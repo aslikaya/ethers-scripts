@@ -343,11 +343,20 @@ Demonstrates contract interaction on localhost:
 
 **Run with:**
 ```bash
-# First start local Hardhat node in another terminal
+# Step 1: Start local Hardhat node in a separate terminal
+cd day3
 npx hardhat node
-# Then run the script
+
+# Step 2: Deploy the contract (in another terminal, if not already deployed)
+cd day3
+npx hardhat ignition deploy ignition/modules/Counter.ts --network localhost
+
+# Step 3: Run the script
+cd day3
 npx hardhat run scripts/contracts.js
 ```
+
+**Note:** The local node must be running and the Counter contract must be deployed before running this script.
 
 **day3/scripts/getBalance.js**
 Shows balance checking on simulated Optimism network:
