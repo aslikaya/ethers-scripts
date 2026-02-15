@@ -405,8 +405,9 @@ Simple counter with `get()`, `inc()`, `dec()` functions, constructor initializat
 
 Custom token contract demonstrating:
 - **Owner-based minting**: `mint(address to)` creates new tokens (owner only)
-- **ETH-to-token buying**: `buy()` allows users to purchase tokens with ETH (1 ETH = 1 token)
-- **Voting system**: `vote(bool selection)` and `checkVotes()` for on-chain governance (one vote per address, majority wins)
+- **ETH-to-token buying**: `buy()` allows users to purchase tokens with ETH (1 ETH = 1 token); also triggered automatically via `receive()` when ETH is sent directly to the contract
+- **Owner withdrawal**: `withdraw()` lets the owner collect all ETH held by the contract
+- **Buy event**: `Buy(address indexed buyer)` emitted on every token purchase for off-chain tracking
 
 #### Testing Strategy
 

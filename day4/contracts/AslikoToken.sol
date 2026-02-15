@@ -2,6 +2,8 @@
 pragma solidity ^0.8.28;
 
 contract AslikoToken {
+    event Buy(address indexed buyer);
+
     uint256 public constant totalSupply = 1000;
     uint256 public totalCreated;
 
@@ -10,14 +12,6 @@ contract AslikoToken {
     address public immutable owner;
 
     mapping(address => uint) public balances;
-
-    struct Vote {
-        address voter;
-        bool selection;
-    }
-
-    Vote[] public votes;
-    mapping(address => bool) public hasVoted;
 
     constructor() {
         owner = msg.sender;
@@ -53,22 +47,16 @@ contract AslikoToken {
 
         balances[msg.sender]++;
         totalCreated++;
+
+        emit Buy(msg.sender);
     }
 
-    function vote(bool selection) public {
-        require(!hasVoted[msg.sender], "You already voted");
-        hasVoted[msg.sender] = true;
-        votes.push(Vote(msg.sender, selection));
+    function withdraw() public onlyOwner {
+        (bool sent, ) = owner.call{value: address(this).balance}("");
+        require(sent, "Failed to send Ether");
     }
 
-    function checkVotes() public view returns(bool resultYes) {
-        uint256 count;
-        for(uint256 i = 0; i < votes.length; i++) { 
-            if(votes[i].selection) {
-                count++;
-            }
-        }
-
-        return count >= votes.length/2 + 1;
-    }
+    receive() external payable {
+        buy();
+    } 
 }
